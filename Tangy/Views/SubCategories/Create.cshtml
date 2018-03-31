@@ -1,4 +1,6 @@
 ﻿@model Tangy.Models.SubCategoryViewModels.SubCategoryAndCategoryViewModel
+@using Tangy.Extensions
+
 @{
     ViewData["Title"] = "Create";
 }
@@ -25,7 +27,7 @@
                     <label asp-for="SubCategory.CategoryId" class="custom-label"></label>
                 </div>
                 <div class="col-5">
-                    @*<input asp-for="SubCategory.Name" class="form-control" />*@
+                    <select asp-for="SubCategory.CategoryId" asp-items="Model.CategoryList.ToSelectListItem(Model.SubCategory.CategoryId)" class="form-control"></select>
                 </div>
             </div>
             <div class="form-group row">
@@ -45,6 +47,20 @@
                 </div>
             </div>
         </form>
+    </div>
+    <div class="col-4">
+        @if (Model.SubCategoryList.Count() > 0)
+        { 
+            <p> Existing Subcategories : </p>
+            <ul class="list-group">
+                @foreach(var item in Model.SubCategoryList)
+                {
+                    <li class="list-group-item">@item</li>
+
+                }
+            </ul>
+
+        }
     </div>
 </div>
 
