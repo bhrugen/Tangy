@@ -14,6 +14,11 @@ namespace Tangy.Controllers
     {
         private readonly ApplicationDbContext _db;
 
+
+        [TempData]
+        public string StatusMessage { get; set; }
+
+
         public SubCategoriesController(ApplicationDbContext db)
         {
             _db = db;
@@ -34,10 +39,61 @@ namespace Tangy.Controllers
             {
                 CategoryList = _db.Category.ToList(),
                 SubCategory = new SubCategory(),
-                SubCategoryList = _db.SubCategory.OrderBy(p => p.Name).Select(p => p.Name).ToList()
+                SubCategoryList = _db.SubCategory.OrderBy(p => p.Name).Select(p => p.Name).Distinct().ToList()
             };
 
             return View(model);
+        }
+
+        //POST Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(SubCategoryAndCategoryViewModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                var doesSubCategoryExists = _db.SubCategory.Where(s => s.Name == model.SubCategory.Name).Count();
+                var doesSubCatAndCatExists = _db.SubCategory.Where(s => s.Name == model.SubCategory.Name && s.CategoryId==model.SubCategory.CategoryId).Count();
+
+
+                if(doesSubCategoryExists > 0 && model.isNew)
+                {
+                    //error
+                    StatusMessage = "Error : Sub Category Name already Exists";
+                }
+                else
+                {
+                    if(doesSubCategoryExists==0 && !model.isNew)
+                    {
+                        //error 
+                        StatusMessage = "Error : Sub Category does not exists";
+                    }
+                    else
+                    {
+                        if(doesSubCatAndCatExists > 0)
+                        {
+                            //error
+                            StatusMessage = "Error : Category and Sub Cateogry combination exists";
+                        }
+                        else
+                        {
+                            _db.Add(model.SubCategory);
+                            await _db.SaveChangesAsync();
+                            return RedirectToAction(nameof(Index));
+                        }
+                    }
+                }
+
+            }
+            SubCategoryAndCategoryViewModel modelVM = new SubCategoryAndCategoryViewModel()
+            {
+                CategoryList = _db.Category.ToList(),
+                SubCategory = model.SubCategory,
+                SubCategoryList = _db.SubCategory.OrderBy(p => p.Name).Select(p => p.Name).ToList(),
+                StatusMessage = StatusMessage
+            };
+            return View(modelVM);
+
         }
 
     }
