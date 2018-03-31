@@ -96,5 +96,30 @@ namespace Tangy.Controllers
 
         }
 
+
+
+        //GET Edit
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if(id==null)
+            {
+                return NotFound();
+            }
+
+            var subCategory = await _db.SubCategory.SingleOrDefaultAsync(m => m.Id == id);
+            if (subCategory == null)
+            {
+                return NotFound();
+            }
+
+            SubCategoryAndCategoryViewModel model = new SubCategoryAndCategoryViewModel()
+            {
+                CategoryList = _db.Category.ToList(),
+                SubCategory = subCategory,
+                SubCategoryList = _db.SubCategory.Select(p => p.Name).Distinct().ToList()
+            };
+            return View(model);
+        }
+
     }
 }
