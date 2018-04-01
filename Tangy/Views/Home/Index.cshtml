@@ -4,11 +4,50 @@
     ViewData["Title"] = "Home Page";
 }
 
-@foreach(var category in Model.Category)
+@Html.Partial("_StatusMessage", Model.StatusMessage)
+<br />
+@if (Model.Coupons.ToList().Count > 0)
+{
+    <div class="container border">
+        <div class="carousel" data-ride="carousel" data-interval="2500">
+            @for (int i = 0; i < Model.Coupons.Count(); i++)
+            {
+                if (i == 0)
+                {
+                    <div class="carousel-item active">
+                        @{
+                            var base64 = Convert.ToBase64String(Model.Coupons.ToList()[i].Picture);
+                            var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+                        }
+                        <img src="@imgsrc" height="50px" class="d-block w-100" />
+                    </div>
+
+                }
+                else
+                {
+
+                    <div class="carousel-item">
+                        @{
+                            var base64 = Convert.ToBase64String(Model.Coupons.ToList()[i].Picture);
+                            var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+                        }
+                        <img src="@imgsrc" height="50px" class="d-block w-100" />
+                    </div>
+
+                }
+
+            }
+
+        </div>
+    </div>
+
+}
+
+@foreach (var category in Model.Category)
 {
     <h3 class="text-success">@category.Name</h3>
     <div class="row" style="padding-bottom:50px;">
-        @Html.Partial("_ThumbnailAreaPartial",Model.MenuItem.Where(u=>u.Category.Name.Equals(category.Name)))
+        @Html.Partial("_ThumbnailAreaPartial", Model.MenuItem.Where(u => u.Category.Name.Equals(category.Name)))
     </div>
 
 }
