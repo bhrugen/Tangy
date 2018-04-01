@@ -1,0 +1,45 @@
+﻿@model IEnumerable<MenuItem>
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@if (Model.Count() > 0)
+{
+    foreach (var item in Model)
+    {
+        <div class="border border-info rounded col-12" style="margin-top:10px;margin-bottom:10px;padding:10px;">
+            <div class="row">
+                <div class="col-9">
+                    <div class="row">
+                        <div class="col-10">
+                            <label class="text-primary" style="font-size:21px;color:maroon;">@item.Name</label>
+                            <br />
+                            <label class="badge badge-primary">@item.SubCategory.Name</label>
+                            @if (item.Spicyness == "1")
+                            {
+                                <label class="badge badge-info">@MenuItem.EScipy.Spicy</label>
+                            }
+                            @if (item.Spicyness == "2")
+                            {
+                                <label class="badge badge-info">@MenuItem.EScipy.VerySpicy</label>
+                            }
+                        </div>
+                        <div class="col-2 text-right" style="color:maroon">
+                            <h4>$@item.Price</h4>
+                        </div>
+                    </div>
+                    <div class="row col-12 text-justify">
+                        <p>@item.Description</p>
+                        <br />
+                        <a asp-action="Details" class="btn btn-success" asp-route-id="@item.Id">Details</a>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <img src="@item.Image" width="90%" style="border-radius:5px;border:1px solid #bbb9b9;" /> 
+                </div>
+            </div>
+        </div>
+
+    }
+
+}
