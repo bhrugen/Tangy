@@ -13,7 +13,7 @@
 <script type="text/javascript">
     $(document).ready(function(){
         getSubCategory();
-        $('#CategoryId').change(function () { 
+        $('#CategoryId').change(function () {
             getSubCategory();
         })
     });
@@ -21,7 +21,7 @@
     function getSubCategory() {
         var url = '@Url.Content("~/")' + "MenuItems/GetSubCategory";
         var ddlsource = "#CategoryId";
-        $.getJSON(url, { CategoryID: $(ddlsource).val() }, function (data) { 
+        $.getJSON(url, { CategoryID: $(ddlsource).val() }, function (data) {
 
             var items = '';
             $("#SubCategoryId").empty();
@@ -108,3 +108,6 @@
     </div>
 </form>
 
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
