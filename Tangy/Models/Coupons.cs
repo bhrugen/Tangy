@@ -21,7 +21,6 @@ namespace Tangy.Models
         public double Discount { get; set; }
         [Required]
         public double MinimumAmount { get; set; }
-        [Required]
         public byte[] Picture { get; set; }
         public  bool isActive { get; set; }
 
