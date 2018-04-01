@@ -124,6 +124,70 @@ namespace Tangy.Controllers
 
             return View(MenuItemVM);
         }
+
+        //POST : Edit MenuItems
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id)
+        {
+            MenuItemVM.MenuItem.SubCategoryId = Convert.ToInt32(Request.Form["SubCategoryId"].ToString());
+
+            if (id!= MenuItemVM.MenuItem.Id)
+            {
+                return NotFound();
+            }
+
+            if(ModelState.IsValid)
+            {
+                try
+                {
+                    string webRootPath = _hostingEnvironment.WebRootPath;
+                    var files = HttpContext.Request.Form.Files;
+                    var menuItemFromDb = _db.MenuItem.Where(m => m.Id == MenuItemVM.MenuItem.Id).FirstOrDefault();
+
+                    if(files[0].Length>0 && files[0]!=null)
+                    {
+                        //if user uploads a new image
+                        var uploads = Path.Combine(webRootPath, "images");
+
+                        var extension_New = files[0].FileName.Substring(files[0].FileName.LastIndexOf("."), files[0].FileName.Length - files[0].FileName.LastIndexOf("."));
+
+                        var extension_Old = menuItemFromDb.Image.Substring(menuItemFromDb.Image.LastIndexOf("."), menuItemFromDb.Image.Length - menuItemFromDb.Image.LastIndexOf("."));
+
+                        if(System.IO.File.Exists(Path.Combine(uploads,MenuItemVM.MenuItem.Id+extension_Old)))
+                        {
+                            System.IO.File.Delete(Path.Combine(uploads, MenuItemVM.MenuItem.Id + extension_Old));
+                        }
+                        using (var filestream = new FileStream(Path.Combine(uploads, MenuItemVM.MenuItem.Id + extension_New), FileMode.Create))
+                        {
+                            files[0].CopyTo(filestream);
+                        }
+                        MenuItemVM.MenuItem.Image = @"\images\" + MenuItemVM.MenuItem.Id + extension_New;
+                    }
+
+                    if(MenuItemVM.MenuItem.Image !=null)
+                    {
+                        menuItemFromDb.Image = MenuItemVM.MenuItem.Image;
+                    }
+                    menuItemFromDb.Name = MenuItemVM.MenuItem.Name;
+                    menuItemFromDb.Description = MenuItemVM.MenuItem.Description;
+                    menuItemFromDb.Price = MenuItemVM.MenuItem.Price;
+                    menuItemFromDb.Spicyness = MenuItemVM.MenuItem.Spicyness;
+                    menuItemFromDb.CategoryId = MenuItemVM.MenuItem.CategoryId;
+                    menuItemFromDb.SubCategoryId = MenuItemVM.MenuItem.SubCategoryId;
+                    await _db.SaveChangesAsync();
+                }
+                catch(Exception ex)
+                {
+
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            MenuItemVM.SubCategory = _db.SubCategory.Where(s => s.CategoryId == MenuItemVM.MenuItem.CategoryId).ToList();
+            return View(MenuItemVM); 
+
+        }
+
         
     }
 }

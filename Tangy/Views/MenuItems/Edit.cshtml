@@ -12,7 +12,7 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-        getSubCategory();
+        
         $('#CategoryId').change(function () {
             getSubCategory();
         })
@@ -91,7 +91,7 @@
                     <label asp-for="MenuItem.SubCategoryId" class="custom-label"></label>
                 </div>
                 <div class="col-8">
-                    <select asp-for="MenuItem.SubCategoryId" name="SubCategoryId" id="SubCategoryId" asp-items="@(new SelectList(string.Empty,"Id","Name"))" class="form-control"></select>
+                    <select asp-for="MenuItem.SubCategoryId" name="SubCategoryId" id="SubCategoryId" asp-items="Model.SubCategory.ToSelectListItem(Model.MenuItem.SubCategoryId)" class="form-control"></select>
                 </div>
             </div>
             <div class="form-group row">
