@@ -59,6 +59,56 @@ namespace Tangy.Controllers
             return View(coupons);
         }
 
+        //GET Edit Coupons
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if(id==null)
+            {
+                return NotFound();
+            }
+            var coupon = await _db.Coupons.SingleOrDefaultAsync(m => m.Id == id);
+            if(coupon==null)
+            {
+                return NotFound();
+            }
+            return View(coupon);
+        }
 
+        public async Task<IActionResult> Edit(int id, Coupons coupons)
+        {
+            if(id!=coupons.Id)
+            {
+                return NotFound();
+            }
+
+            var couponFromDb = await _db.Coupons.Where(c => c.Id == id).FirstOrDefaultAsync();
+
+            if(ModelState.IsValid)
+            {
+                var files = HttpContext.Request.Form.Files;
+                if (files[0] != null && files[0].Length > 0)
+                {
+                    byte[] p1 = null;
+                    using (var fs1 = files[0].OpenReadStream())
+                    {
+                        using (var ms1 = new MemoryStream())
+                        {
+                            fs1.CopyTo(ms1);
+                            p1 = ms1.ToArray();
+                        }
+                    }
+                    coupons.Picture = p1;
+                }
+                couponFromDb.MinimumAmount = coupons.MinimumAmount;
+                couponFromDb.Name = coupons.Name;
+                couponFromDb.Discount = coupons.Discount;
+                couponFromDb.CouponType = coupons.CouponType;
+                couponFromDb.isActive = coupons.isActive;
+
+                await _db.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(coupons);
+        }
     }
 }
