@@ -74,6 +74,8 @@ namespace Tangy.Controllers
             return View(coupon);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Coupons coupons)
         {
             if(id!=coupons.Id)
@@ -97,7 +99,7 @@ namespace Tangy.Controllers
                             p1 = ms1.ToArray();
                         }
                     }
-                    coupons.Picture = p1;
+                    couponFromDb.Picture = p1;
                 }
                 couponFromDb.MinimumAmount = coupons.MinimumAmount;
                 couponFromDb.Name = coupons.Name;

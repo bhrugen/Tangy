@@ -1,0 +1,80 @@
+﻿@model Tangy.Models.Coupons
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<br />
+<h2>Edit Coupon</h2>
+<br />
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <div class="row container">
+        <div class=" col-12 border m-4">
+            @{
+            var base64 = Convert.ToBase64String(Model.Picture);
+            var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+            }
+            <img src="@imgsrc" height="53px" width="100%" />
+        </div>
+        <div class="col-6">
+            <input hidden asp-for="Id" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Name" class="custom-label"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Name" class="form-control" />
+                </div>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Picture" class="custom-label"></label>
+                </div>
+                <div class="col-8">
+                    <input type="file" id="projectImage" name="files" multiple class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="CouponType" class="custom-label"></label>
+                </div>
+                <div class="col-8">
+                    <select asp-for="CouponType" asp-items="Html.GetEnumSelectList<Coupons.ECouponType>()" class="form-control"></select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Discount" class="custom-label"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Discount" class="form-control" />
+                </div>
+                <span asp-validation-for="Discount" class="text-danger"></span>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="MinimumAmount" class="custom-label"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="MinimumAmount" class="form-control" />
+                </div>
+                <span asp-validation-for="MinimumAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="isActive" class="custom-label"></label>
+                </div>
+                <div class="col-8">
+                    <input type="checkbox" asp-for="isActive" class="form-control" />
+                </div>
+            </div>
+
+
+        </div>
+        <div class="col-12" style="padding-top:10px;">
+            <input type="submit" value="Update" asp-route-id="@Model.Id" class="btn btn-primary" />
+            <a asp-action="Index" class="btn btn-success">Back to List</a>
+        </div>
+    </div>
+</form>
