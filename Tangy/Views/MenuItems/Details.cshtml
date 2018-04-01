@@ -1,0 +1,76 @@
+﻿@model Tangy.Models.MenuItemViewModels.MenuItemViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+
+<br />
+<h2>Details Menu Item</h2>
+<br />
+<div class="form-border row">
+    <div class="col-8">
+        <fieldset disabled>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="MenuItem.Name" class="custom-label"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="MenuItem.Name" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="MenuItem.Description" class="custom-label"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="MenuItem.Description" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="MenuItem.Price" class="custom-label"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="MenuItem.Price" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="MenuItem.CategoryId" class="custom-label"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="MenuItem.Category.Name" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="MenuItem.SubCategoryId" class="custom-label"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="MenuItem.SubCategory.Name" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="MenuItem.Spicyness" class="custom-label"></label>
+                </div>
+                <div class="col-8">
+                    <select asp-for="MenuItem.Spicyness" asp-items="Html.GetEnumSelectList<MenuItem.EScipy>()" class="form-control"></select>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="col-1"></div>
+    <div class="col-3">
+        <img src="@Model.MenuItem.Image" width="100%" style="border-radius:5px;border:1px solid #bbb9b9;" />
+    </div>
+    <br />
+    <div class="form-group">
+        <a asp-action="Edit" asp-route-id="@Model.MenuItem.Id" class="btn btn-primary">Edit</a>
+        <a asp-action="Index" class="btn btn-success">Back to List</a>
+    </div>
+</div>
+
+
