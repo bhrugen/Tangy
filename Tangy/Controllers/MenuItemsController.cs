@@ -37,5 +37,11 @@ namespace Tangy.Controllers
             var menuItems = _db.MenuItem.Include(m => m.Category).Include(m => m.SubCategory);
             return View(await menuItems.ToListAsync());
         }
+
+        //GET : MenuItems Create
+        public IActionResult Create()
+        {
+            return View(MenuItemVM);
+        }
     }
 }
