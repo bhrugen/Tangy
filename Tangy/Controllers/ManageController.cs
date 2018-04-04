@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Tangy.Data;
 using Tangy.Models;
 using Tangy.Models.ManageViewModels;
 using Tangy.Services;
@@ -25,6 +26,7 @@ namespace Tangy.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
         private readonly UrlEncoder _urlEncoder;
+        private readonly ApplicationDbContext _db;
 
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
         private const string RecoveryCodesKey = nameof(RecoveryCodesKey);
@@ -34,13 +36,15 @@ namespace Tangy.Controllers
           SignInManager<ApplicationUser> signInManager,
           IEmailSender emailSender,
           ILogger<ManageController> logger,
-          UrlEncoder urlEncoder)
+          UrlEncoder urlEncoder,
+          ApplicationDbContext db)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
             _urlEncoder = urlEncoder;
+            _db = db;
         }
 
         [TempData]
@@ -61,7 +65,9 @@ namespace Tangy.Controllers
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
                 IsEmailConfirmed = user.EmailConfirmed,
-                StatusMessage = StatusMessage
+                StatusMessage = StatusMessage,
+                FirstName=user.FirstName,
+                LastName=user.LastName
             };
 
             return View(model);
@@ -92,15 +98,13 @@ namespace Tangy.Controllers
                 }
             }
 
-            var phoneNumber = user.PhoneNumber;
-            if (model.PhoneNumber != phoneNumber)
-            {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, model.PhoneNumber);
-                if (!setPhoneResult.Succeeded)
-                {
-                    throw new ApplicationException($"Unexpected error occurred setting phone number for user with ID '{user.Id}'.");
-                }
-            }
+            var userInDb = _db.Users.Where(u => u.Email.Equals(model.Email)).FirstOrDefault();
+
+            userInDb.FirstName = model.FirstName;
+            userInDb.LastName = model.LastName;
+            userInDb.PhoneNumber = model.PhoneNumber;
+
+            await _db.SaveChangesAsync();
 
             StatusMessage = "Your profile has been updated";
             return RedirectToAction(nameof(Index));
