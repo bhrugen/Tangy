@@ -1,0 +1,85 @@
+﻿@model Tangy.Models.ApplicationUser
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Permanently Lock User</h2>
+
+
+<form method="post">
+    <div class="form-border">
+        <div asp-validation-summary="ModelOnly" class="text-danger">
+        </div>
+        <input type="hidden" asp-for="Id" />
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="FirstName" class="custom-label"></label>
+            </div>
+            <div class="col-4">
+                <input asp-for="FirstName" readonly class="form-control" />
+            </div>
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="LastName" class="custom-label"></label>
+            </div>
+            <div class="col-4">
+                <input asp-for="LastName" readonly class="form-control" />
+            </div>
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="Email" class="custom-label"></label>
+            </div>
+            <div class="col-4">
+                <input asp-for="Email" readonly class="form-control" />
+            </div>
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="PhoneNumber" class="custom-label"></label>
+            </div>
+            <div class="col-4">
+                <input asp-for="PhoneNumber" readonly class="form-control" />
+            </div>
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="LockoutEnd" class="custom-label"></label>
+            </div>
+            <div class="col-4">
+                <input asp-for="LockoutEnd" readonly type="text" asp-format="{0:MM/dd/yyyy}" class="form-control" />
+            </div>
+            <span asp-validation-for="LockoutEnd" class="text-danger"></span>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="LockoutReason" class="custom-label"></label>
+            </div>
+            <div class="col-4">
+                <textarea asp-for="LockoutReason" class="form-control" style="height:100px;"></textarea>
+            </div>
+            <span asp-validation-for="LockoutReason" class="text-danger"></span>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="AccessFailedCount" class="custom-label"></label>
+            </div>
+            <div class="col-4">
+                <input asp-for="AccessFailedCount" readonly class="form-control" />
+            </div>
+            <span asp-validation-for="AccessFailedCount" class="text-danger"></span>
+        </div>
+        <br />
+        <div class="form-group">
+            <input type="submit" value="Lock User" class="btn btn-danger" />
+            <a asp-action="Index" class="btn btn-success">Back to List</a>
+        </div>
+    </div>
+</form>
+
