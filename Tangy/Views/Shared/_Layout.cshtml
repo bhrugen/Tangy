@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Tangy.Utility
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -25,35 +27,45 @@
         <a class="navbar-brand" asp-action="Index" asp-controller="Home">Tangy</a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><a class="nav-link" href="#">Order History</a> </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Admin
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" asp-controller="Categories" asp-action="Index">Category</a>
-                        <a class="dropdown-item" asp-controller="SubCategories" asp-action="Index">Sub Category</a>
-                        <a class="dropdown-item" asp-controller="MenuItems" asp-action="Index">Menu Items</a>
-                        <a class="dropdown-item" asp-controller="Coupons" asp-action="Index">Coupons</a>
-                        <a class="dropdown-item" asp-controller="Users" asp-action="Index">Users</a>
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Order
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Manage Order</a>
-                        <a class="dropdown-item" href="#">Order Pickup</a>
-                        <a class="dropdown-item" href="#">Download Order Details</a>
-                    </div>
-                </li>
-                <li style="color:white;">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-shopping-cart"></i>
-                        &nbsp;(0)
-                    </a>
-                </li>
+
+                @if (User.IsInRole(SD.AdminEndUser) || User.IsInRole(SD.CustomerEndUser))
+                {
+                    <li class="nav-item"><a class="nav-link" href="#">Order History</a> </li>
+                }
+                @if (User.IsInRole(SD.AdminEndUser))
+                {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Admin
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" asp-controller="Categories" asp-action="Index">Category</a>
+                            <a class="dropdown-item" asp-controller="SubCategories" asp-action="Index">Sub Category</a>
+                            <a class="dropdown-item" asp-controller="MenuItems" asp-action="Index">Menu Items</a>
+                            <a class="dropdown-item" asp-controller="Coupons" asp-action="Index">Coupons</a>
+                            <a class="dropdown-item" asp-controller="Users" asp-action="Index">Users</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Order
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">Manage Order</a>
+                            <a class="dropdown-item" href="#">Order Pickup</a>
+                            <a class="dropdown-item" href="#">Download Order Details</a>
+                        </div>
+                    </li>
+                }
+                @if (User.IsInRole(SD.AdminEndUser) || User.IsInRole(SD.CustomerEndUser))
+                {
+                    <li style="color:white;">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-shopping-cart"></i>
+                            &nbsp;(0)
+                        </a>
+                    </li>
+                }
             </ul>
         </div>
 
