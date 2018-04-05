@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Tangy.Data;
 using Tangy.Models;
+using Tangy.Utility;
 
 namespace Tangy.Controllers
 {
+    [Authorize(Roles = SD.AdminEndUser)]
     public class CategoriesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -18,13 +21,12 @@ namespace Tangy.Controllers
         {
             _context = context;
         }
-
+        
         // GET: Categories
         public async Task<IActionResult> Index()
         {
             return View(await _context.Category.ToListAsync());
         }
-
         // GET: Categories/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -42,7 +44,6 @@ namespace Tangy.Controllers
 
             return View(category);
         }
-
         // GET: Categories/Create
         public IActionResult Create()
         {

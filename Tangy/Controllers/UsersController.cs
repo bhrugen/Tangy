@@ -13,6 +13,7 @@ using Tangy.Utility;
 
 namespace Tangy.Controllers
 {
+    [Authorize(Roles = SD.AdminEndUser)]
     public class UsersController : Controller
     {
         private readonly ApplicationDbContext _context;
