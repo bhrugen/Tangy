@@ -163,5 +163,37 @@
             });
 
         });
+
+
+        $('#btnCoupon').click(function () {
+            var couponCode = document.getElementById("txtCouponCode").value;
+            var orderTotal = document.getElementById("txtOrderTotal").value;
+
+            $.ajax({
+                url: '/API/CouponAPI?orderTotal=' + orderTotal + '&couponCode=' + couponCode,
+                type: 'GET',
+                dataType: 'text',
+                success: function (data, textStatus, xhr) {
+                    var splitData = data.split(":");
+
+                    if (splitData[1] == 'E') {
+                        //Error
+                        alert("Coupons is either invalid or does not meet the criteria");
+                    }
+                    else {
+                        //Success
+                        $('#txtOrderTotal').attr('value', Math.round(splitData[0] * 100) / 100);
+                        document.getElementById('txtCouponCode').readOnly = true;
+                        document.getElementById('btnCoupon').style.display = 'none';
+                        document.getElementById('btnRemoveCoupon').style.display='';
+
+                    }
+
+                }
+
+            })
+
+        });
+
     </script>
 }
