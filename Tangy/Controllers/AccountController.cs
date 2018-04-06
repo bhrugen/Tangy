@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -72,6 +73,9 @@ namespace Tangy.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
+                    var user = _db.Users.Where(u => u.Email == model.Email).FirstOrDefault();
+                    var count = _db.ShoppingCart.Where(u => u.ApplicationUserId == user.Id).ToList().Count;
+                    HttpContext.Session.SetInt32("CartCount", count);
                     _logger.LogInformation("User logged in.");
                     return RedirectToLocal(returnUrl);
                 }
@@ -258,6 +262,7 @@ namespace Tangy.Controllers
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation("User created a new account with password.");
+                    HttpContext.Session.SetInt32("CartCount", 0);
                     return RedirectToLocal(returnUrl);
                 }
                 AddErrors(result);

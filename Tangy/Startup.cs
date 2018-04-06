@@ -42,7 +42,6 @@ namespace Tangy
             services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddMvc();
-
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -67,7 +66,7 @@ namespace Tangy
             app.UseStaticFiles();
 
             app.UseAuthentication();
-
+            app.UseSession();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
