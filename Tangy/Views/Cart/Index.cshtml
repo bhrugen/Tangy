@@ -53,8 +53,56 @@
                     }
                 </table>
             </div>
+            <hr />
             <div class="container">
+                <div class="row">
+                    <div class="col-2">
+                        <label class="custom-label">Coupon Code : </label>
+                    </div>
+                    <div class="col-2">
+                        <input asp-for="@Model.OrderHeader.CouponCode" id="txtCouponCode" class="form-control" />
+                    </div>
+                    <div class="col-2">
+                        <input type="button" value="Apply" id="btnCoupon" class="btn btn-sm btn-success" />
+                        <a asp-action="Index" asp-controller="Cart" id="btnRemoveCoupon" style="display:none;" class="btn btn-sm btn-success">Remove</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2">
+                        <label class="custom-label">Order Total : </label>
+                    </div>
+                    <div class="col-3">
+                        <input asp-for="@Model.OrderHeader.OrderTotal" readonly id="txtOrderTotal" class="form-control" />
+                    </div>
+                    <div class="col-2">
 
+                    </div>
+                    <div class="col-2">
+                        <label class="custom-label">Pick Up Time : </label>
+                    </div>
+                    <div class="col-3">
+                        <input asp-for="@Model.OrderHeader.PickUpTime" id="timepicker" type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2">
+                        <label class="custom-label">Comments : </label>
+                    </div>
+                    <div class="col-10">
+                        <textarea asp-for="@Model.OrderHeader.Comments" style="height:100px;" class="form-control"></textarea>
+                    </div>
+                </div>
+                <div class="row" style="padding-top:5px;">
+                    <div class="col-2">
+
+                    </div>
+                    <div class="col-5">
+                        <label class="text-danger" id="lblShopClosed" style="display:none;">Restaurant is closed for the day. </label>
+                    </div>
+                    <div class="col-5 text-right">
+                        <button type="submit" id="btnPlaceOrder" onclick="return validateInput()" value="Place Order" class="btn btn-success">Place Order</button>
+                    </div>
+                </div>
             </div>
         </div>
 
