@@ -1,0 +1,71 @@
+﻿@model Tangy.Models.OrderDetailsViewModel.OrderDetailsCart
+@{
+    ViewData["Title"] = "Index";
+}
+
+<form method="post">
+    <h2>Your Shopping Cart</h2>
+    <br />
+
+    @if(Model.listCart.Count>0)
+    {
+        <input id="userId" asp-for="@Model.listCart[0].ApplicationUserId" hidden />
+        <div class="border border-info" style="padding:15px;">
+            <div class="container">
+                <table class="table table-striped" width="100%">
+                    <tr>
+                        <th></th>
+                        <th style="width:70px;text-align:center">
+                            <label asp-for="@Model.listCart.FirstOrDefault().MenuItem.Price"></label>
+                        </th>
+                        <th style="width:70px;text-align:center">
+                            <label asp-for="@Model.listCart.FirstOrDefault().Count"></label>
+                        </th>
+                        <th></th>
+                    </tr>
+                    @foreach (var item in Model.listCart)
+                    {
+                    <tr style="padding:50px;">
+                        <td>
+                            <b>
+                                @Html.DisplayFor(c => item.MenuItem.Name)
+                            </b>
+                            <br />
+                            @Html.DisplayFor(c => item.MenuItem.Description)
+                        </td>
+                        <td style="width:70px;text-align:center">
+                            @Html.DisplayFor(c => item.MenuItem.Price)
+                        </td>
+                        <td style="width:70px;text-align:center">
+                            @Html.DisplayFor(c => item.Count)
+                        </td>
+                        <td>
+                            <button type="submit" class="btn btn-primary" asp-action="plus" asp-route-cartId="@item.Id">
+                                <i class="fas fa-plus"></i>
+                            </button>
+
+                            <button type="submit" class="btn btn-danger" asp-action="minus" asp-route-cartId="@item.Id">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </td>
+                    </tr>
+
+                    }
+                </table>
+            </div>
+            <div class="container">
+
+            </div>
+        </div>
+
+    }
+    else
+    {
+        <div> No items added to the shopping cart...</div>
+
+    }
+
+
+
+
+</form>
