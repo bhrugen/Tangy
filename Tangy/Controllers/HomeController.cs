@@ -31,6 +31,20 @@ namespace Tangy.Controllers
             return View(IndexVM);
         }
 
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var MenuItemFromDb = await _db.MenuItem.Include(m => m.Category).Include(m => m.SubCategory).Where(m => m.Id == id).FirstOrDefaultAsync();
+
+            ShoppingCart CartObj = new ShoppingCart()
+            {
+                MenuItem = MenuItemFromDb,
+                MenuItemId = MenuItemFromDb.Id
+            };
+
+            return View(CartObj);
+        }
+
         
         public IActionResult Error()
         {
