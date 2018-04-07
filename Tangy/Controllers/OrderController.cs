@@ -110,5 +110,23 @@ namespace Tangy.Controllers
             return RedirectToAction("ManageOrder", "Order");
 
         }
+
+        //GET Order Pickup
+        public IActionResult OrderPickup()
+        {
+            List<OrderDetailsViewModel> OrderDetailsVM = new List<OrderDetailsViewModel>();
+            List<OrderHeader> OrderHeaderList = _db.OrderHeader.Where(o => o.Status ==SD.StatusReady)
+                .OrderByDescending(u => u.PickUpTime).ToList();
+
+            foreach (OrderHeader item in OrderHeaderList)
+            {
+                OrderDetailsViewModel individual = new OrderDetailsViewModel();
+                individual.OrderHeader = item;
+                individual.OrderDetail = _db.OrderDetails.Where(o => o.OrderId == item.Id).ToList();
+                OrderDetailsVM.Add(individual);
+
+            }
+            return View(OrderDetailsVM);
+        }
     }
 }
