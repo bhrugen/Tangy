@@ -78,5 +78,37 @@ namespace Tangy.Controllers
             }
             return View(OrderDetailsVM);
         }
+
+
+
+        [Authorize(Roles =SD.AdminEndUser)]
+        public async Task<IActionResult> OrderPrepare(int orderId)
+        {
+            OrderHeader orderHeader = _db.OrderHeader.Find(orderId);
+            orderHeader.Status = SD.StatusInProcess;
+            await _db.SaveChangesAsync();
+            return RedirectToAction("ManageOrder", "Order");
+
+        }
+
+        [Authorize(Roles = SD.AdminEndUser)]
+        public async Task<IActionResult> OrderReady(int orderId)
+        {
+            OrderHeader orderHeader = _db.OrderHeader.Find(orderId);
+            orderHeader.Status = SD.StatusReady;
+            await _db.SaveChangesAsync();
+            return RedirectToAction("ManageOrder", "Order");
+
+        }
+
+        [Authorize(Roles = SD.AdminEndUser)]
+        public async Task<IActionResult> OrderCancel(int orderId)
+        {
+            OrderHeader orderHeader = _db.OrderHeader.Find(orderId);
+            orderHeader.Status = SD.StatusCancelled;
+            await _db.SaveChangesAsync();
+            return RedirectToAction("ManageOrder", "Order");
+
+        }
     }
 }
