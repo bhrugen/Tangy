@@ -1,0 +1,79 @@
+﻿@model Tangy.Models.OrderDetailsViewModel.OrderExportViewModel
+@{
+    ViewData["Title"] = "OrderSummaryExport";
+}
+<br />
+<h2>Download Order Details</h2>
+
+
+@section Scripts{
+
+    <script type="text/javascript">
+        $(function () {
+            var dateFormat = "mm/dd/yy",
+                from = $("#from")
+                    .datepicker({
+                        changeMonth: true,
+                        changeYear: true,
+                        maxDate: "+0D"
+                    })
+                    .on("change", function () {
+                        to.datepicker("option", "minDate", getDate(this));
+                    }),
+                to = $("#to").datepicker({
+                    defaultDate: "+1w",
+                    changeMonth: true,
+                    changeYear: true,
+                    maxDate: "+0D"
+
+                })
+                    .on("change", function () {
+                        from.datepicker("option", "maxDate", getDate(this));
+                    });
+
+            function getDate(element) {
+                var date;
+                try {
+                    date = $.datepicker.parseDate(dateFormat, element.value);
+                } catch (error) {
+                    date = null;
+                }
+
+                return date;
+            }
+        });
+    </script>
+}
+<br />
+<br />
+<div class="container border">
+    <h4 style="color:steelblue;">Select Date Range : </h4>
+    <br />
+    <form method="post">
+        <div class="row">
+            <div class="col-2">
+                <label asp-for="startDate" class="custom-label"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="@Model.startDate" type="text" id="from" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2">
+                <label asp-for="endDate" class="custom-label"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="@Model.endDate" type="text" id="to" class="form-control">
+            </div>
+        </div>
+        <div class="row" style="padding-top:10px;">
+            <div class="col-2">
+            </div>
+            <div class="col-4">
+                <button type="submit" class="btn btn-primary form-control"><i class="fas fa-download"></i> &nbsp;Download</button>
+            </div>
+        </div>
+
+    </form>
+
+</div>
