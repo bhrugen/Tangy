@@ -18,7 +18,7 @@ namespace Tangy.Controllers
     public class OrderController : Controller
     {
         private ApplicationDbContext _db;
-
+        private int PageSize = 2;
         public OrderController(ApplicationDbContext db)
         {
             _db = db;
@@ -44,12 +44,15 @@ namespace Tangy.Controllers
 
 
         [Authorize]
-        public IActionResult OrderHistory()
+        public IActionResult OrderHistory(int productPage=1)
         {
             var claimsIdentity = (ClaimsIdentity)this.User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            List<OrderDetailsViewModel> OrderDetailsVM = new List<OrderDetailsViewModel>();
+            OrderListViewModel orderListVM = new OrderListViewModel()
+            {
+                Orders = new List<OrderDetailsViewModel>()
+            };
 
             List<OrderHeader> OrderHeaderList = _db.OrderHeader.Where(u => u.UserId == claim.Value).OrderByDescending(u => u.OrderDate).ToList();
 
@@ -60,10 +63,23 @@ namespace Tangy.Controllers
                     OrderHeader = item,
                     OrderDetail = _db.OrderDetails.Where(o => o.OrderId == item.Id).ToList()
                 };
-                OrderDetailsVM.Add(individual);
-
+                orderListVM.Orders.Add(individual);
             }
-            return View(OrderDetailsVM);
+            var count = orderListVM.Orders.Count;
+            orderListVM.Orders = orderListVM.Orders.OrderBy(p => p.OrderHeader.Id)
+                .Skip((productPage - 1) * PageSize)
+                .Take(PageSize).ToList();
+
+            orderListVM.PagingInfo = new PagingInfo
+            {
+                CurrentPage = productPage,
+                ItemsPerPage = PageSize,
+                TotalItem = count
+            };
+
+
+
+            return View(orderListVM);
         }
 
         [Authorize(Roles =SD.AdminEndUser)]
