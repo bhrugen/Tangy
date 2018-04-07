@@ -1,0 +1,57 @@
+﻿@model Tangy.Models.OrderDetailsViewModel.OrderDetailsViewModel
+
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+
+<div class="row rounded" style="background-color:aliceblue;margin-bottom:20px;">
+    <div class="col-6">
+        <div style="color:maroon">Order Number : @Model.OrderHeader.Id</div>
+        <ul class="text-info">
+            @foreach(var details in Model.OrderDetail)
+            {
+                <li>@details.Name x @details.Count</li>
+
+            }
+        </ul>
+    </div>
+    <div class="col-6">
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-4">
+                Order Total
+            </div>
+            <div class="col-6">
+                $@Model.OrderHeader.OrderTotal
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-4">
+                PickUp Time :
+            </div>
+            <div class="col-6">
+                @Model.OrderHeader.PickUpTime.ToShortDateString() &nbsp; @Model.OrderHeader.PickUpTime.ToShortTimeString()
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-4">
+                Order Status : 
+            </div>
+            <div class="col-6">
+                @Model.OrderHeader.Stauts
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-4">
+                Comments : 
+            </div>
+            <div class="col-6">
+                @Model.OrderHeader.Comments
+            </div>
+        </div>
+    </div>
+</div>
