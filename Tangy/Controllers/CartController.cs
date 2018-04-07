@@ -73,7 +73,7 @@ namespace Tangy.Controllers
 
             detailCart.OrderHeader.OrderDate = DateTime.Now;
             detailCart.OrderHeader.UserId = claim.Value;
-            detailCart.OrderHeader.Stauts = SD.StatusSubmitted;
+            detailCart.OrderHeader.Status = SD.StatusSubmitted;
             OrderHeader orderHeader = detailCart.OrderHeader;
             _db.OrderHeader.Add(orderHeader);
             _db.SaveChanges();

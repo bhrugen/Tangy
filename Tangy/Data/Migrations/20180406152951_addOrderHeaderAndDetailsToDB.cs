@@ -20,7 +20,7 @@ namespace Tangy.Data.Migrations
                     OrderDate = table.Column<DateTime>(nullable: false),
                     OrderTotal = table.Column<double>(nullable: false),
                     PickUpTime = table.Column<DateTime>(nullable: false),
-                    Stauts = table.Column<string>(nullable: true),
+                    Status = table.Column<string>(nullable: true),
                     UserId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>

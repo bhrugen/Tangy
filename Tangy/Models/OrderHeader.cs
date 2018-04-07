@@ -28,7 +28,7 @@ namespace Tangy.Models
         public DateTime PickUpTime { get; set; }
 
         public string CouponCode { get; set; }
-        public string Stauts { get; set; }
+        public string Status { get; set; }
         public string Comments { get; set; }
 
     }
