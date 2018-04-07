@@ -1,0 +1,58 @@
+﻿@model List<Tangy.Models.OrderDetailsViewModel.OrderDetailsViewModel>
+@using Tangy.Utility
+
+@{
+    ViewData["Title"] = "ManageOrder";
+}
+
+<h2>Manage Order's</h2>
+<form method="post">
+    <br />
+    @if (Model.Count > 0)
+    {
+        @foreach (var item in Model)
+        {
+            <div class="container row">
+                <div class="col-10">
+                    @Html.Partial("_IndividualOrderDetails", item)
+                </div>
+                <div class="col-2">
+                    @if (item.OrderHeader.Status.Equals(SD.StatusSubmitted))
+                    {
+                        <button type="submit" asp-action="OrderPrepare" asp-route-orderId="@item.OrderHeader.Id" class="btn btn-primary form-control">
+                            <i class="fas fa-check"></i>Start Cooking
+                        </button>
+
+                        <button type="submit" asp-action="OrderCancel" asp-route-orderId="@item.OrderHeader.Id" class="btn btn-danger form-control">
+                            <i class="fas fa-times"></i>Cancel Order
+                        </button>
+
+                    }
+                    else
+                    {
+                        @if (item.OrderHeader.Status.Equals(SD.StatusInProcess))
+                        {
+                            <button type="submit" asp-action="OrderReady" asp-route-orderId="@item.OrderHeader.Id" class="btn btn-success form-control">
+                                <i class="fas fa-flag-checkered"></i>Order Prepared
+                            </button>
+
+                            <button type="submit" asp-action="OrderCancel" asp-route-orderId="@item.OrderHeader.Id" class="btn btn-danger form-control">
+                                <i class="fas fa-times"></i>Cancel Order
+                            </button>
+
+                        }
+
+                    }
+                </div>
+            </div>
+
+        }
+
+    }
+    else
+    {
+        <p> No order's currently available...</p>
+
+    }
+</form>
+
