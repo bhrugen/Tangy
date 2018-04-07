@@ -35,7 +35,7 @@
 
                 @if (User.IsInRole(SD.AdminEndUser) || User.IsInRole(SD.CustomerEndUser))
                 {
-                    <li class="nav-item"><a class="nav-link" href="#">Order History</a> </li>
+                    <li class="nav-item"><a class="nav-link" asp-action="OrderHistory" asp-controller="Order">Order History</a> </li>
                 }
                 @if (User.IsInRole(SD.AdminEndUser))
                 {

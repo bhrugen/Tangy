@@ -1,0 +1,23 @@
+﻿@model List<Tangy.Models.OrderDetailsViewModel.OrderDetailsViewModel>
+@{
+    ViewData["Title"] = "OrderHistory";
+}
+
+<h2>Order History</h2>
+<br />
+
+@if(Model.Count>0)
+{
+    @foreach(var item in Model)
+    {
+        @Html.Partial("_IndividualOrderDetails",item)
+
+    }
+
+}
+else
+{
+    <p>No past orders available...</p>
+
+}
+<br />
