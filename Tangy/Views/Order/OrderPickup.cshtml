@@ -1,0 +1,81 @@
+﻿@model List<Tangy.Models.OrderDetailsViewModel.OrderDetailsViewModel>
+@using Tangy.Utility
+
+@{
+    ViewData["Title"] = "ManageOrder";
+}
+
+<form method="post">
+    <br />
+
+    <div style="height:150px;background-color:aliceblue" class="container">
+        <h4 style="color:steelblue">&nbsp; Search Criteria</h4>
+        <div class="col-12">
+            <div class="row" style="padding-top:10px;">
+                <div class="col-2">
+                    Order Number
+                </div>
+                <div class="col-3">
+                    @Html.Editor("searchOrder", new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="col-2"></div>
+                <div class="col-2">
+                    Phone Number
+                </div>
+                <div class="col-3">
+                    @Html.Editor("searchPhone", new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+            </div>
+            <div class="row" style="padding-top:10px;">
+                <div class="col-2">
+                    Email
+                </div>
+                <div class="col-3">
+                    @Html.Editor("searchEmail", new { htmlAttributes = new {@id="email", @class = "form-control" } })
+                </div>
+                <div class="col-2"></div>
+                <div class="col-2">
+                    
+                </div>
+                <div class="col-3">
+                    <button type="submit" name="submit" value="Search" class="btn btn-primary form-control">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br />
+    <h3> Orders : </h3>
+    <br />
+
+
+    @if (Model.Count > 0)
+    {
+        @foreach (var item in Model)
+        {
+            <div class="container row">
+                <div class="col-10">
+                    @Html.Partial("_IndividualOrderDetails", item)
+                </div>
+                <div class="col-2">
+                    @if (item.OrderHeader.Status.Equals(SD.StatusReady))
+                    {
+                        <a asp-action="OrderPickupDetails" asp-route-orderId="@item.OrderHeader.Id" class="btn btn-success">
+                            <i class="far fa-thumbs-up"></i>Pick Up Details
+                        </a>
+                    }
+                </div>
+            </div>
+
+        }
+
+    }
+    else
+    {
+        <p> No order's currently available...</p>
+
+    }
+</form>
+
