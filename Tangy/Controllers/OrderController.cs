@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tangy.Data;
+using Tangy.Models;
 using Tangy.Models.OrderDetailsViewModel;
 
 namespace Tangy.Controllers
@@ -35,6 +36,28 @@ namespace Tangy.Controllers
             };
 
             return View(OrderDetailsViewModel);
+        }
+
+
+        [Authorize]
+        public IActionResult OrderHistory()
+        {
+            var claimsIdentity = (ClaimsIdentity)this.User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            List<OrderDetailsViewModel> OrderDetailsVM = new List<OrderDetailsViewModel>();
+
+            List<OrderHeader> OrderHeaderList = _db.OrderHeader.Where(u => u.UserId == claim.Value).OrderByDescending(u => u.OrderDate).ToList();
+
+            foreach(OrderHeader item in OrderHeaderList)
+            {
+                OrderDetailsViewModel individual = new OrderDetailsViewModel();
+                individual.OrderHeader = item;
+                individual.OrderDetail = _db.OrderDetails.Where(o => o.OrderId == item.Id).ToList();
+                OrderDetailsVM.Add(individual);
+
+            }
+            return View(OrderDetailsVM);
         }
     }
 }
