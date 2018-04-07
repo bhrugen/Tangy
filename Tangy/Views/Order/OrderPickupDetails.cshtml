@@ -1,0 +1,124 @@
+﻿@model Tangy.Models.OrderDetailsViewModel.OrderDetailsViewModel
+@using Tangy.Utility
+@{
+    ViewData["Title"] = "OrderPickupDetails";
+}
+
+<br />
+<h3 class="text-info">Confirm Pickup Details :</h3>
+<br />
+<form method="post">
+    <div class="container row border p-3">
+        <div class="col-8" style="border-right:1px solid #bbb9b9;">
+            <br />
+            <div class="form-group row">
+                <div class="col-3">
+                    <label class="custom-label">Name</label>
+                </div>
+                <div class="col-9">
+                    @{
+                        var fullName = Model.OrderHeader.ApplicationUser.FirstName + " " + Model.OrderHeader.ApplicationUser.LastName;
+                    }
+                    <input asp-for="@fullName" disabled class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-3">
+                    <label asp-for="OrderHeader.ApplicationUser.Email" class="custom-label"></label>
+                </div>
+                <div class="col-9">
+                    <input asp-for="OrderHeader.ApplicationUser.Email" disabled class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-3">
+                    <label asp-for="OrderHeader.ApplicationUser.PhoneNumber" class="custom-label"></label>
+                </div>
+                <div class="col-9">
+                    <input asp-for="OrderHeader.ApplicationUser.PhoneNumber" disabled class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-3">
+                    <label asp-for="OrderHeader.OrderTotal" class="custom-label"></label>
+                </div>
+                <div class="col-9">
+                    <input asp-for="OrderHeader.OrderTotal" disabled class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-3">
+                    <label asp-for="OrderHeader.OrderDate" class="custom-label"></label>
+                </div>
+                <div class="col-9">
+                    <input value="@Model.OrderHeader.OrderDate.ToShortDateString() @Model.OrderHeader.PickUpTime.ToShortTimeString() " disabled class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-3">
+                    <label asp-for="OrderHeader.Comments" class="custom-label"></label>
+                </div>
+                <div class="col-9">
+                    <input asp-for="OrderHeader.Comments" disabled class="form-control" />
+                </div>
+            </div>
+        </div>
+
+        <div class="col-4">
+            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-muted">Order ID: </span>
+                <span class="badge badge-secondary badge-pill">@Model.OrderHeader.Id</span>
+            </h4>
+            <ul class="list-group mb-3">
+                @{ var total = 0.0;}
+                @foreach (var details in Model.OrderDetail)
+                {
+                    <li class="list-group-item d-flex justify-content-between">
+                        <div>
+                            <h6 class="my-0">@details.Name</h6>
+                            <small class="text-muted">Quantity : @details.Count</small>
+                        </div>
+                        <span class="text-muted">@(details.Price * details.Count)</span>
+                        @{ total += (details.Price * details.Count);}
+                    </li>
+                }
+                @if (Model.OrderHeader.CouponCode != null)
+                {
+                    <li class="list-group-item d-flex justify-content-between">
+                        <div class="text-success">
+                            <h6 class="my-0">Promo Code</h6>
+                            <small>@Model.OrderHeader.CouponCode</small>
+                        </div>
+                        <span class="text-success">-@(total - Model.OrderHeader.OrderTotal)</span>
+                    </li>
+
+                }
+                <li class="list-group-item d-flex justify-content-between bg-light">
+                    <span class="text-info">Total (USD)</span>
+                    <strong class="text-info">$@Model.OrderHeader.OrderTotal</strong>
+                </li>
+            </ul>
+
+            @if(Model.OrderHeader.Status.Equals(SD.StatusReady))
+            {
+            <button type="submit" asp-route-orderId="@Model.OrderHeader.Id" class="btn btn-success form-control">
+                <i class="far fa-thumbs-up"></i>
+                    Confirm PickUp
+            </button>
+
+            }
+            else
+            {
+                <button type="submit" disabled class="btn btn-primary form-control">@Model.OrderHeader.Status</button>
+
+            }
+
+        </div>
+
+
+
+
+
+    </div>
+</form>
+
