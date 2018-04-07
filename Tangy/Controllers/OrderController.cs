@@ -181,5 +181,19 @@ namespace Tangy.Controllers
             }
             return View(OrderDetailsVM);
         }
+
+
+        [Authorize(Roles =SD.AdminEndUser)]
+        public IActionResult OrderPickupDetails(int orderId)
+        {
+            OrderDetailsViewModel OrderDetailsVM = new OrderDetailsViewModel
+            {
+                OrderHeader = _db.OrderHeader.Where(o => o.Id == orderId).FirstOrDefault()
+            };
+            OrderDetailsVM.OrderHeader.ApplicationUser = _db.Users.Where(u => u.Id == OrderDetailsVM.OrderHeader.UserId).FirstOrDefault();
+            OrderDetailsVM.OrderDetail = _db.OrderDetails.Where(o => o.OrderId == OrderDetailsVM.OrderHeader.Id).ToList();
+
+            return View(OrderDetailsVM);
+        }
     }
 }
