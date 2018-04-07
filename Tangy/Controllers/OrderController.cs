@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Tangy.Data;
 using Tangy.Models;
 using Tangy.Models.OrderDetailsViewModel;
+using Tangy.Utility;
 
 namespace Tangy.Controllers
 {
@@ -50,6 +51,24 @@ namespace Tangy.Controllers
             List<OrderHeader> OrderHeaderList = _db.OrderHeader.Where(u => u.UserId == claim.Value).OrderByDescending(u => u.OrderDate).ToList();
 
             foreach(OrderHeader item in OrderHeaderList)
+            {
+                OrderDetailsViewModel individual = new OrderDetailsViewModel();
+                individual.OrderHeader = item;
+                individual.OrderDetail = _db.OrderDetails.Where(o => o.OrderId == item.Id).ToList();
+                OrderDetailsVM.Add(individual);
+
+            }
+            return View(OrderDetailsVM);
+        }
+
+        [Authorize(Roles =SD.AdminEndUser)]
+        public IActionResult ManageOrder()
+        {
+            List<OrderDetailsViewModel> OrderDetailsVM = new List<OrderDetailsViewModel>();
+            List<OrderHeader> OrderHeaderList = _db.OrderHeader.Where(o=>o.Status==SD.StatusSubmitted || o.Status==SD.StatusInProcess)
+                .OrderByDescending(u => u.PickUpTime).ToList();
+
+            foreach (OrderHeader item in OrderHeaderList)
             {
                 OrderDetailsViewModel individual = new OrderDetailsViewModel();
                 individual.OrderHeader = item;
