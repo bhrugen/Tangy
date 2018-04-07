@@ -82,4 +82,26 @@
 
 @section scripts{ 
     <script src="~/js/Typeahead.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        var emailSrc = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace,
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: {
+                url: '/API/Users?type=email&query=%QUERY',
+                wildcard: '%QUERY'
+            }
+        });
+
+        $('#email').typeahead({ highlight: true, minLength: 3 },
+            {
+            display: 'email',
+            source: emailSrc
+        });
+
+    });
+    </script>
+
 }
