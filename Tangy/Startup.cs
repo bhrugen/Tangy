@@ -40,7 +40,11 @@ namespace Tangy
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
-
+            services.AddAuthentication().AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = "2062712107340146";
+                facebookOptions.AppSecret = "21220f2631e62a5b2f1a072b01e5b1b7";
+            });
             services.AddMvc();
             services.AddSession(options =>
             {
