@@ -232,26 +232,47 @@ namespace Tangy.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser {
+                var user = new ApplicationUser
+                {
                     UserName = model.Email,
                     Email = model.Email,
                     PhoneNumber = model.PhoneNumber,
-                    FirstName=model.FirstName,
-                    LastName=model.LastName
+                    FirstName = model.FirstName,
+                    LastName = model.LastName
                 };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    //admin@gmail.com
+                    //ph : 1112223333
+                    //name : Admin Spark
 
-                    if(! await _roleManager.RoleExistsAsync(SD.AdminEndUser))
+                    if (!await _roleManager.RoleExistsAsync(SD.AdminEndUser))
                     {
                         await _roleManager.CreateAsync(new IdentityRole(SD.AdminEndUser));
+                        var userAdmin = new ApplicationUser
+                        {
+                            UserName = "admin@gmail.com",
+                            Email = "admin@gmail.com",
+                            PhoneNumber = "1112223333",
+                            FirstName = "Admin",
+                            LastName = "Spark"
+                        };
+                        var resultAdmin = await _userManager.CreateAsync(userAdmin, "Admin123*");
+                        await _userManager.AddToRoleAsync(user, SD.AdminEndUser);
                     }
                     if (!await _roleManager.RoleExistsAsync(SD.CustomerEndUser))
                     {
                         await _roleManager.CreateAsync(new IdentityRole(SD.CustomerEndUser));
                     }
 
+
+                    //if (user.Email == "admin@gmail.com" && user.PhoneNumber == "1112223333" && user.FirstName == "Admin" && user.LastName == "Spark")
+                    //{
+                    //    await _userManager.AddToRoleAsync(user, SD.AdminEndUser);
+                    //}
+                    //else
+                    //{ }
                     await _userManager.AddToRoleAsync(user, SD.CustomerEndUser);
 
                     _logger.LogInformation("User created a new account with password.");
@@ -326,12 +347,12 @@ namespace Tangy.Controllers
                 var email = info.Principal.FindFirstValue(ClaimTypes.Email);
                 var name = info.Principal.FindFirstValue(ClaimTypes.Name).Split(' ');
 
-                return View("ExternalLogin", 
+                return View("ExternalLogin",
                     new ExternalLoginViewModel
                     {
                         Email = email,
-                        FirstName=name[0].ToString(),
-                        LastName=name[1].ToString()
+                        FirstName = name[0].ToString(),
+                        LastName = name[1].ToString()
                     });
             }
         }
@@ -350,13 +371,13 @@ namespace Tangy.Controllers
                     throw new ApplicationException("Error loading external login information during confirmation.");
                 }
                 var user = new ApplicationUser
-                    {
-                        UserName = model.Email,
-                        Email = model.Email,
-                        FirstName=model.FirstName,
-                        LastName=model.LastName,
-                        PhoneNumber=model.PhoneNumber
-                    };
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    PhoneNumber = model.PhoneNumber
+                };
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
