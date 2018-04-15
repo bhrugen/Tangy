@@ -9,14 +9,14 @@
 <form asp-action="Edit" method="post" enctype="multipart/form-data">
     <div class="row container form-border">
         <br />
-        <div class=" col-12 border">
+        <div class="col-12 border">
             @{
             var base64 = Convert.ToBase64String(Model.Picture);
             var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
             }
-            <img src="@imgsrc" height="53px" width="100%" />
+            <img src="@imgsrc" height="100%" width="100%" />
         </div>
-        <div class="col-6">
+        <div class="col-6 pt-4">
             <input hidden asp-for="Id" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group row">
