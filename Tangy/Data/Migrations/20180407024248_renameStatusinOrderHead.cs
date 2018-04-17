@@ -8,10 +8,10 @@ namespace Tangy.Data.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "Stauts",
-                table: "OrderHeader",
-                newName: "Status");
+            //migrationBuilder.RenameColumn(
+            //    name: "Stauts",
+            //    table: "OrderHeader",
+            //    newName: "Status");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

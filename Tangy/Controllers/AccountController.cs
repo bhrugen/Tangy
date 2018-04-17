@@ -259,7 +259,7 @@ namespace Tangy.Controllers
                             LastName = "Spark"
                         };
                         var resultAdmin = await _userManager.CreateAsync(userAdmin, "Admin123*");
-                        await _userManager.AddToRoleAsync(user, SD.AdminEndUser);
+                        await _userManager.AddToRoleAsync(userAdmin, SD.AdminEndUser);
                     }
                     if (!await _roleManager.RoleExistsAsync(SD.CustomerEndUser))
                     {
